@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit this template
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html">
+    <h:head>
+        <title>Div</title>
+    </h:head>
+    <h:body>
+        <h:form>
+            <h:outputLabel for="num" value="Num:" />
+            <h:inputText id="num" value="${bean.num}" required="true" requiredMessage="U need to"/>
+            <br/><br/>
+            <h:outputLabel for="den" value="Den:" />
+            <h:inputText id="den" value="${bean.den}" required="true" requiredMessage="U need to"/>
+            <br/><br/>
+            <h:commandButton value="Divide" action="${bean.perform}"/>
+            <br/><br/>
+            <h:outputText value="Result: ${bean.result}" rendered="${not empty bean.result}"/>
+            <br/><br/>
+            <h:message for="num" style="color:red;" />
+            <h:message for="den" style="color:red;" />
+        </h:form>
+    </h:body>
+</html>
