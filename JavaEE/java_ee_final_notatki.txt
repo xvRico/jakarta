@@ -1,0 +1,121 @@
+JSP - notatki
+
+1) Zawsze w jsp na początku robimy (session/application).getAttribute("jakasnazwa"); i przypisujemy do mojej klasy beansowej (można bez beansa)
+2) potem sprawdzamy czy jest nullem (zawsze) i jak jest nullem to robimy nowa klase timer = new Timer(); i potem setAttribute("jakasnazwa", timer);
+3) Potem jesteśmy pewni ze zmienna istnieje i mozemy z niej korzystać
+4) Przy edycjy tak samo co przed trzecim, ale dodatkowo:
+	a) zawsze po zmienie zmiennej trzeba setAttribute zmienic zmienna
+
+FORM (służy do przesyłania danych pomiędzy frontendem a frontendem, czyli tylko stronki, np z stronki one.jsp do two.jsp)
+
+- tutaj trzeba podać method="get" lub method="post"
+- tutaj też ustawić action np. action="two.jsp"
+- pamiętać że dla request.getParameter zawsze dla requestów jest parametr
+- tutaj jak wpisuje dane np <input type="text" name="imie" value="Imie"></input>
+	-> tutaj value to jest wartość startowa (mozna dac pusty string i np w kodzie sprawdzac czy użytkownik pustego nie wyslal)
+	-> tutaj mozna sobie type zmieniać np. text, hidden
+	-> name to po prostu nazwa pudełeczka, tutaj bez znaczenia większego, potem ew się do tego odwołuje
+
+jak robie request.getParameter("nazwa") to jakbym wyciągał to co mam w fieldzie value="imie" czyli wyciągnie mi string imie, ale może byc null więc nalezy sprawdzać czy nie jest nullem!!!
+"nazwa" w tym to jest wartość name="nazwa" w przycisku np. <button type="submit" name="reset" value="true">Reset Timer</button>
+
+mogę używać response.sendRedirect("nazwa_strony.jsp"); aby przekierowywać pomiędzy stronami (ew po każdym redirect robić return;)
+
+-> ustawianie pierwszej strony w JSP:
+<welcome-file-list>
+     <welcome-file>nazwa.jsp</welcome-file>
+</welcome-file-list>
+
+
+SERVLET - notatki
+
+to jest to samo co JSP, tylko kod sobie przeklejam, a HTML wrzucam do tych out.println i koniec, bo to jest odwrotność, że tam kod na stronie HTML miałem, a tutaj mam HTML w kodzie java
+ewentualnie, jeśli dynamicznie nie wyswietla mi sie cos na stronie np timer, imie i nazwisko. To możemy zrobić response.sendRedirect("two.html"); wtedy tylko nie trzeba przepisywać na out.println
+ale jak chce nie kombinować to mogę przepisać dla spokoju
+tutaj jak przesyłam formularz form to podawać action="/sciezka" tutaj w servlecie na górze jest napisane jaka sciezka z niej korzystac
+wrzucac do processRequest, chyba ze chce aby doGet i doPost mialy inna logike, wtedy w form trzeba method="get" lub "post" dobrze wpisac
+w servletach jak chce do sesji sie odwołać to trzeba robic request.getSession(); (pamietac zaimportowac); a do aplikacji request.getServletContext(); (pamietac import)
+można sobie zrobić zmienne HttpSession session = request.getSession(); ServletContext application = request.getServletContext(); aby wygodniej sie odwolywac
+pamiętać że jak miałem href to zmienic na sciezki np Two
+pamiętać \ przed " jak robimy out.println
+pamietac jak źle przekierowuje to próbowac bez /sciezka tylko sciezka samo
+dodac index.jsp z response.sendRedirect("One");  bo nie da sie ustawic na strone poczatkowa servleta wiec musimy miec takiego slupa co przekierowuje na start
+
+ZAWSZE NA POCZATKU processRequest() wrzucic: !!!!!!!
+HttpSession session = request.getSession();
+ServletContext application = request.getServletContext();
+
+-> ustawianie pierwszej strony w Servlet:
+<servlet>
+        <servlet-name>Nazwa_servletu</servlet-name>
+        <servlet-class>com.mycompany.nazwa_projektu.Nazwa_servletu</servlet-class> <!-- TUTAJ UWAGA DOBRZE PROJEKT NAZWA WPISAC -->
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Nazwa_servletu</servlet-name>
+<url-pattern>/</url-pattern>
+</servlet-mapping>
+
+---> tutaj przykład:
+
+<servlet>
+        <servlet-name>Calc</servlet-name>
+        <servlet-class>com.mycompany.errorhandlingredirects.Calc</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Calc</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+
+
+JSF - notatki
+
+na początku stronki wrzucić:
+
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:h="http://xmlns.jcp.org/jsf/html" 
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+
+na początku w web.xml dodać:
+	<servlet-mapping>
+        	<servlet-name>Faces</servlet-name>
+        	<url-pattern>*.xhtml</url-pattern>
+    	</servlet-mapping>
+bo inaczej będzie działać ale pod /faces/*
+- w JSF trzeba #{nazwaBean.zmienna} lub #{nazwaBean.metoda()} aby sie odwolywac do zmiennych lub metod (pamietac ze zmienne musza byc publiczne lub robic gettery/settery)
+pamietac że gettery i settery muszą miec specjalne nazwy getZmienna setZmienna, lub po prostu publiczne zmienne robić
+- tutaj h:form bez żadnych atrybutów, w buttonie dodamy jaka method i action
+- pamietac h:commandButton robic w h:form, tutaj value="Co na buttonie napisane" nie pisac pomiedzy tagami nic bo wyswietli sie tekst obok
+action="strona.xhtml?faces-redirect=true" lub action="#{nazwaBean.metoda()}" lub action="#{nazwaBean.zmienna}"
+jak przekierowujemy to dodawać ?faces-redirect=true np.: action="strona.xhtml?faces-redirect=true" bo inaczej takie potwierdzenia formularza nam wywala nonstop
+
+
+-> ustawianie strony startowej JSF:
+<servlet-mapping>
+        <servlet-name>Faces Servlet</servlet-name>
+        <url-pattern>*.xhtml</url-pattern>
+    </servlet-mapping>
+<welcome-file-list>
+        <welcome-file>calc.xhtml</welcome-file>
+    </welcome-file-list
+
+
+HashMap - notatki
+inicjujemy HashMap<klucz, wartość>
+-> zrobić notatki
+
+
+@Inject - z tego zrobić notatki
+
+
+
+REST 
+
+sciezka to link:8080/nazwa_projektu/resouces/calculator/add?a=1&b=2
+tutaj @QueryParam("a")
+
+to recources patrzec w com.mycompany.rest i tam w pliku java jest ew
+
+albo link:8080/nazwa_projektu/resouces/calculator/add/1/2
+tutaj @PathParam("a")
